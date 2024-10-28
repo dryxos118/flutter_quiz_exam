@@ -7,6 +7,8 @@ part of 'quiz.dart';
 // **************************************************************************
 
 Quiz _$QuizFromJson(Map<String, dynamic> json) => Quiz(
+      json['userId'] as String?,
+      json['userName'] as String?,
       name: json['name'] as String,
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
       questions: (json['questions'] as List<dynamic>)
@@ -23,4 +25,6 @@ Map<String, dynamic> _$QuizToJson(Quiz instance) => <String, dynamic>{
       'tags': instance.tags,
       'questions': instance.questions,
       'leaderboard': instance.leaderboard,
+      'userId': instance.userId,
+      'userName': instance.userName,
     };

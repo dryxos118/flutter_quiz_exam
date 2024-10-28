@@ -9,11 +9,14 @@ class Quiz {
   final String name;
   final List<String> tags;
   final List<Question> questions;
-
   int get questionCount => questions.length;
   final List<Leaderboard> leaderboard;
+  final String? userId;
+  final String? userName;
 
-  Quiz({
+  Quiz(
+    this.userId,
+    this.userName, {
     required this.name,
     required this.tags,
     required this.questions,
