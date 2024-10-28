@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_quiz_exam/layout/quiz_bottom_navigation.dart';
-import 'package:flutter_quiz_exam/layout/quiz_scaffold.dart';
 import 'package:flutter_quiz_exam/logic/provider/firebase_auth_provider.dart';
 import 'package:flutter_quiz_exam/logic/provider/quiz_editor_provider.dart';
 import 'package:flutter_quiz_exam/views/edition/question_editor.dart';
