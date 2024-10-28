@@ -7,7 +7,7 @@ class QuizEditor extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const Center(
-      child: Text("HOME"),
+      child: Text("EDITOR"),
     );
   }
 }

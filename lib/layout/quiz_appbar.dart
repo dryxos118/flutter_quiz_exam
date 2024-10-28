@@ -27,12 +27,11 @@ class QuizAppbar extends ConsumerWidget implements PreferredSizeWidget {
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: () {
-            onLogoutPressed;
-          },
-          icon: const Icon(Icons.flag),
-          // color: userCredentials != null ? Colors.green : Colors.red),
-        )
+            onPressed: () {
+              onLogoutPressed;
+            },
+            icon: const Icon(Icons.flag),
+            color: userCredentials != null ? Colors.green : Colors.red),
       ],
     );
   }

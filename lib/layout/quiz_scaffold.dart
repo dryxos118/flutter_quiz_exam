@@ -12,7 +12,7 @@ class QuizScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(firebaseNotifier);
+    final user = ref.watch(firebaseProvider);
     void onLoginPressed() {
       if (user != null) {
         print("logout");

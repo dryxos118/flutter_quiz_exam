@@ -15,12 +15,9 @@ class QuizBottomNavigation extends HookConsumerWidget {
       indexNotifier.updateIndex(index); // Met à jour l'index
       switch (index) {
         case 0:
-          context.go('/');
-          break;
-        case 1:
           context.go('/quiz');
           break;
-        case 2:
+        case 1:
           context.go('/editor');
           break;
       }
@@ -29,15 +26,11 @@ class QuizBottomNavigation extends HookConsumerWidget {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Accueil',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.search),
+          icon: Icon(Icons.interests),
           label: 'Quiz',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.edit_note),
           label: 'Editor',
         ),
       ],
