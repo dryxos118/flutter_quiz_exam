@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
   routes: appRoutes,
+  initialLocation: "/quiz",
   redirect: (context, state) {
     final container = ProviderScope.containerOf(context);
     final isSignedIn = container.read(firebaseNotifier);

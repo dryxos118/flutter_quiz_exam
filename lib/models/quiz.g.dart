@@ -18,9 +18,11 @@ Quiz _$QuizFromJson(Map<String, dynamic> json) => Quiz(
           const [],
       userId: json['userId'] as String?,
       userName: json['userName'] as String?,
+      uid: json['uid'] as String?,
     );
 
 Map<String, dynamic> _$QuizToJson(Quiz instance) => <String, dynamic>{
+      'uid': instance.uid,
       'name': instance.name,
       'tags': instance.tags,
       'questions': instance.questions,
