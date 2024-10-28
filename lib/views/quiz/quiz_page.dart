@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quiz_exam/layout/quiz_scaffold.dart';
 import 'package:flutter_quiz_exam/models/quiz.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_quiz_exam/views/quiz/topics/quiz_topic_items.dart';
 import 'package:flutter_quiz_exam/data/quiz_data.dart';
 
 class QuizPage extends StatelessWidget {
-  const QuizPage({Key? key}) : super(key: key);
+  const QuizPage({super.key});
 
   Future<List<Quiz>> getQuizs() async {
     return getQuiz();
@@ -18,10 +18,10 @@ class QuizPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // return const LoadingScreen();
-          return Text("load");
+          return const Text("load");
         } else if (snapshot.hasError) {
           // return ErrorMessage(message: snapshot.error.toString());
-          return Text("error");
+          return const Text("error");
         } else if (snapshot.hasData) {
           var topics = snapshot.data!;
           return Scaffold(
@@ -35,8 +35,8 @@ class QuizPage extends StatelessWidget {
             ),
           );
         } else {
-          return const Scaffold(
-            body: Center(
+          return QuizScaffold(
+            body: const Center(
               child: Text('No topics found in Firestore. Check database'),
             ),
           );

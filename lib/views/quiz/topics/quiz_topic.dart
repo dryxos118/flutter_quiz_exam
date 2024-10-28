@@ -4,42 +4,36 @@ import 'package:flutter_quiz_exam/models/question.dart';
 
 class QuizTopic extends StatelessWidget {
   final Quiz quiz;
-  const QuizTopic({Key? key, required this.quiz}) : super(key: key);
+  const QuizTopic({super.key, required this.quiz});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        toolbarHeight: 30.0,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        color: Colors.white,
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.0),
-          color: Colors.white,
-        ),
-        margin: const EdgeInsets.all(30.0),
-        child: ListView(
-          padding: const EdgeInsets.all(0),
-          children: [
-            const SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16.0),
-                child: Image.asset(
-                  'assets/images/quiz-logo.png',
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.height * 0.4,
-                ),
+      margin: const EdgeInsets.all(30.0),
+      child: ListView(
+        padding: const EdgeInsets.all(0),
+        children: [
+          const SizedBox(height: 20.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16.0),
+              child: Image.asset(
+                'assets/images/quiz-logo.png',
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height * 0.4,
               ),
             ),
-            const SizedBox(height: 20.0),
-            ..._buildQuestions(
-                quiz.questions), // Afficher les questions et options
-          ],
-        ),
+          ),
+          const SizedBox(height: 20.0),
+          ..._buildQuestions(
+              quiz.questions), // Afficher les questions et options
+        ],
       ),
     );
   }
