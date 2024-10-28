@@ -12,12 +12,14 @@ class QuizData {
               "Quel langage de programmation est utilisé pour développer avec Flutter ?",
           options: ["JavaScript", "Dart", "Swift", "Kotlin"],
           correctAnswerIndex: 1,
+          isTrueOrFalse: false,
         ),
         Question(
           text:
               "Quel widget est couramment utilisé pour les mises en page dans Flutter ?",
           options: ["Column", "Container", "Text", "Stack"],
           correctAnswerIndex: 1,
+          isTrueOrFalse: false,
         ),
         Question(
           text: "Quelle commande permet de crée un nouveau projet Flutter ?",
@@ -28,6 +30,7 @@ class QuizData {
             "flutter start"
           ],
           correctAnswerIndex: 1,
+          isTrueOrFalse: false,
         ),
         Question(
           text: "Quel widget permet d'afficher une liste déroulante ?",
@@ -38,23 +41,27 @@ class QuizData {
             "SingleChildScrollView"
           ],
           correctAnswerIndex: 0,
+          isTrueOrFalse: false,
         ),
         Question(
           text: "Quel est le widget parent de tous les widgets dans Flutter ?",
           options: ["Container", "MaterialApp", "Scaffold", "Widget"],
           correctAnswerIndex: 3,
+          isTrueOrFalse: false,
         ),
         Question(
           text:
               "Quel widget permet d'afficher une page complète avec un AppBar dans Flutter ?",
           options: ["AppBar", "Scaffold", "Container", "Column"],
           correctAnswerIndex: 1,
+          isTrueOrFalse: false,
         ),
         Question(
           text:
               "Quelle méthode est utilisée pour reconstruire l'interface utilisateur dans Flutter ?",
           options: ["build()", "setState()", "rebuild()", "refresh()"],
           correctAnswerIndex: 1,
+          isTrueOrFalse: false,
         ),
         Question(
           text: "Quel type de widget ne possède pas d'état modifiable ?",
@@ -65,6 +72,7 @@ class QuizData {
             "Container"
           ],
           correctAnswerIndex: 1,
+          isTrueOrFalse: false,
         ),
         Question(
           text:
@@ -76,6 +84,7 @@ class QuizData {
             "settings.dart"
           ],
           correctAnswerIndex: 0,
+          isTrueOrFalse: false,
         ),
         Question(
           text:
@@ -87,6 +96,7 @@ class QuizData {
             "flutter build"
           ],
           correctAnswerIndex: 0,
+          isTrueOrFalse: false,
         ),
       ],
     );

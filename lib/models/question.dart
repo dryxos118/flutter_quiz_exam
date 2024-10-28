@@ -5,7 +5,7 @@ part 'question.g.dart';
 @JsonSerializable()
 class Question {
   final String text;
-  final int isTrueOrFalse;
+  final bool isTrueOrFalse;
   final List<String> options;
   final int correctAnswerIndex;
 

@@ -16,7 +16,7 @@ class RegisterView extends StatelessWidget {
             children: [
               // Logo en SVG
               Image.asset(
-                'assets/images/quiz-log.png',
+                'assets/images/quiz-logo.png',
                 height: 100,
               ),
               const SizedBox(height: 20),

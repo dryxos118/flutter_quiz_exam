@@ -8,7 +8,7 @@ part of 'question.dart';
 
 Question _$QuestionFromJson(Map<String, dynamic> json) => Question(
       text: json['text'] as String,
-      isTrueOrFalse: (json['isTrueOrFalse'] as num).toInt(),
+      isTrueOrFalse: json['isTrueOrFalse'] as bool,
       options:
           (json['options'] as List<dynamic>).map((e) => e as String).toList(),
       correctAnswerIndex: (json['correctAnswerIndex'] as num).toInt(),

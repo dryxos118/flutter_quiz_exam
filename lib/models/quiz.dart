@@ -14,13 +14,13 @@ class Quiz {
   final String? userId;
   final String? userName;
 
-  Quiz(
-    this.userId,
-    this.userName, {
+  Quiz({
     required this.name,
     required this.tags,
     required this.questions,
     this.leaderboard = const [],
+    this.userId,
+    this.userName,
   });
 
   factory Quiz.fromJson(Map<String, dynamic> json) => _$QuizFromJson(json);
