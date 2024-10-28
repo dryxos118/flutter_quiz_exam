@@ -76,7 +76,7 @@ class RegisterForm extends HookConsumerWidget {
               () {
                 // SnackbarService(context)
                 //     .showSnackbar(title: "User Connected", type: Type.succes);
-                context.go('/');
+                context.go('/quiz');
               },
             ),
             child: const Text('Se connecter'),
