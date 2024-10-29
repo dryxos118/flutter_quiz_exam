@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quiz_exam/layout/quiz_scaffold.dart';
-import 'package:flutter_quiz_exam/models/quiz.dart';
-import 'package:flutter_quiz_exam/views/quiz/topics/quiz_topic_items.dart';
 import 'package:flutter_quiz_exam/data/quiz_data.dart';
+import 'package:flutter_quiz_exam/logic/provider/quiz_games_stream_provider.dart';
+import 'package:flutter_quiz_exam/models/quiz.dart';
+import 'package:flutter_quiz_exam/views/quiz/quiz_topic.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class QuizPage extends StatelessWidget {
+class QuizPage extends ConsumerWidget {
   const QuizPage({super.key});
 
   Future<List<Quiz>> getQuizs() async {
@@ -12,36 +13,53 @@ class QuizPage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Quiz>>(
-      future: getQuizs(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // return const LoadingScreen();
-          return const Text("load");
-        } else if (snapshot.hasError) {
-          // return ErrorMessage(message: snapshot.error.toString());
-          return const Text("error");
-        } else if (snapshot.hasData) {
-          var topics = snapshot.data!;
-          return Scaffold(
-            body: GridView.count(
-              primary: false,
-              padding: const EdgeInsets.all(5),
-              crossAxisSpacing: 10,
-              crossAxisCount: 2,
-              children:
-                  topics.map((topic) => QuizTopicItems(quiz: topic)).toList(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final quizStream = ref.watch(quizGamesStreamProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Titre de la page
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Center(
+            child: Text(
+              "Liste des Quiz",
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-          );
-        } else {
-          return QuizScaffold(
-            body: const Center(
-              child: Text('No topics found in Firestore. Check database'),
+          ),
+        ),
+        const SizedBox(height: 10),
+
+        // Contenu principal
+        Expanded(
+          child: quizStream.when(
+            data: (quizList) => quizList.isNotEmpty
+                ? ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: quizList.length,
+                    itemBuilder: (context, index) {
+                      return QuizTopicItem(quiz: quizList[index]);
+                    },
+                  )
+                : Center(
+                    child: IconButton(
+                        onPressed: () async {
+                          await ref
+                              .read(quizGamesStreamProvider.notifier)
+                              .initializeDb();
+                        },
+                        icon: const Icon(Icons.replay_outlined))),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text("Erreur : $error"),
+              ),
             ),
-          );
-        }
-      },
+          ),
+        ),
+      ],
     );
   }
 }

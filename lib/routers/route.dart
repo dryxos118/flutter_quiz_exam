@@ -29,6 +29,15 @@ final List<GoRoute> appRoutes = [
             context, state, QuizScaffold(body: const QuizPage()));
       }),
   GoRoute(
+    path: '/playquiz/:id',
+    name: 'Play quiz',
+    pageBuilder: (context, state) {
+      final quizId = state.pathParameters['id'] ?? "";
+      return _buildFadeTransitionPage(
+          context, state, QuizGames(quizId: quizId));
+    },
+  ),
+  GoRoute(
       path: '/editor',
       name: "Editor",
       pageBuilder: (context, state) {
@@ -36,21 +45,14 @@ final List<GoRoute> appRoutes = [
             context, state, QuizScaffold(body: const QuizEditorList()));
       }),
   GoRoute(
-    path: '/quizeditor',
+    path: '/quizeditor/:id',
     name: "Quiz Editor",
     pageBuilder: (context, state) {
+      final quizId = state.pathParameters['id'] ?? "";
       return _buildFadeTransitionPage(
-          context, state, QuizScaffold(body: const QuizEditor("")));
+          context, state, QuizScaffold(body: QuizEditor(quizId)));
     },
   ),
-  GoRoute(
-    path: '/playquiz',
-    name: 'Play quiz',
-    pageBuilder: (context, state) {
-      return _buildFadeTransitionPage(
-          context, state, QuizScaffold(body: const QuizGames(quizId: "")));
-    },
-  )
 ];
 
 Page _buildFadeTransitionPage(
