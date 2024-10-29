@@ -27,7 +27,7 @@ class QuizEditorProvider extends StateNotifier<Quiz> {
     state = state.copyWith(tags: tags);
   }
 
-  // Méthode pour ajouter une question
+  /// Méthode pour ajouter une question
   void addQuestion() {
     final newQuestion = Question(
       text: '',
@@ -38,7 +38,7 @@ class QuizEditorProvider extends StateNotifier<Quiz> {
     state = state.copyWith(questions: [...state.questions, newQuestion]);
   }
 
-  // Méthode pour mettre à jour une question
+  /// Méthode pour mettre à jour une question
   void updateQuestion(int index, Question question) {
     final updatedQuestions = [...state.questions];
     updatedQuestions[index] = question;

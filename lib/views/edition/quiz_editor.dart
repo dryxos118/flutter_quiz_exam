@@ -54,55 +54,69 @@ class QuizEditor extends HookConsumerWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Bouton de retour
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
                   icon: const Icon(Icons.arrow_back),
+                  color: Colors.red,
                   onPressed: () {
-                    context.go('/editor'); // Retourne à la page précédente
+                    context.go('/editor');
                   },
                 ),
-                const Spacer(),
-                Text(quiz.name, style: const TextStyle(fontSize: 18)),
+                const SizedBox(width: 10),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Form(
               key: formKey,
-              child: ListView(
-                shrinkWrap: true, // Important pour les ListView imbriquées
-                physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TextFormField(
                     controller: nameController,
-                    decoration: const InputDecoration(labelText: 'Nom du Quiz'),
+                    decoration: InputDecoration(
+                      labelText: 'Nom du Quiz',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                     onChanged: quizNotifier.updateQuizName,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Ce champ est requis'
                         : null,
                   ),
+                  const SizedBox(height: 15),
                   TextFormField(
                     controller: tagsController,
-                    decoration: const InputDecoration(
-                        labelText: 'Tags (séparés par des virgules)'),
+                    decoration: InputDecoration(
+                      labelText: 'Tags (séparés par des virgules)',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
                     onChanged: (value) {
                       final tags =
                           value.split(',').map((tag) => tag.trim()).toList();
                       quizNotifier.updateTags(tags);
                     },
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   const Center(
-                    child: Text('Questions',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      'Questions',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
+                  const SizedBox(height: 10),
                   ExpansionPanelList(
                     expansionCallback: (panelIndex, isExpanded) {
                       expandedPanels.value = [
@@ -113,32 +127,67 @@ class QuizEditor extends HookConsumerWidget {
                             expandedPanels.value[i]
                       ];
                     },
+                    dividerColor: Colors.grey[300],
                     children: quiz.questions.asMap().entries.map((entry) {
                       int index = entry.key;
                       return ExpansionPanel(
                         headerBuilder: (context, isExpanded) {
                           return ListTile(
-                            title: Text('Question ${index + 1}'),
+                            title: Text(
+                              'Question ${index + 1}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                             leading: IconButton(
                               onPressed: () => removeQuestion(index),
-                              icon: const Icon(Icons.delete, color: Colors.red),
+                              icon: const Icon(Icons.delete,
+                                  color: Colors.redAccent),
                             ),
                           );
                         },
-                        body: QuestionEditor(
-                            index), // Remplacez cela par votre éditeur de question
+                        body: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                          child: QuestionEditor(index),
+                        ),
                         isExpanded: expandedPanels.value[index],
                       );
                     }).toList(),
                   ),
-                  TextButton(
-                    onPressed: addQuestion,
-                    child: const Text('Ajouter une Question'),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: TextButton.icon(
+                      onPressed: addQuestion,
+                      icon: const Icon(Icons.add, color: Colors.blueAccent),
+                      label: const Text(
+                        'Ajouter une Question',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.blueAccent,
+                        ),
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: saveQuiz,
-                    child: const Text('Enregistrer le Quiz'),
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 32,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: saveQuiz,
+                      child: const Text(
+                        'Enregistrer le Quiz',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ],
               ),
