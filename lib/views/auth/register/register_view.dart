@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quiz_exam/constants/constants.dart';
 import 'package:flutter_quiz_exam/views/auth/register/register_form.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,10 +15,16 @@ class RegisterView extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo en SVG
-              Image.asset(
-                'assets/images/quiz-logo.png',
-                height: 100,
+              // Logo
+              Container(
+                child: ClipRRect(
+                  borderRadius: generalBorderRadius(),
+                  child: Image.asset(
+                    'assets/images/quiz-logo.png',
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               Padding(
