@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_exam/constants/constants.dart';
 import 'package:flutter_quiz_exam/logic/provider/quiz_editor_provider.dart';
-import 'package:flutter_quiz_exam/models/quiz.dart';
+import 'package:flutter_quiz_exam/logic/provider/quiz_list_editor_provicer.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -10,11 +10,11 @@ class QuizEditorList extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<List<Quiz>> getQuizzes() async {
-      final t = await ref.read(quizProvider.notifier).getQuizByName();
-      print(t);
-      return t;
-    }
+    // Récupérer les quizzes à partir du provider
+    ref.read(quizListEditorProvider.notifier).getQuizzesByUser();
+
+    // Écouter les quizzes
+    final quizzes = ref.watch(quizListEditorProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -28,15 +28,8 @@ class QuizEditorList extends HookConsumerWidget {
           ),
         ),
       ),
-      body: FutureBuilder<List<Quiz>>(
-        future: getQuizzes(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erreur : ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
+      body: quizzes.isEmpty
+          ? const Center(
               child: Text(
                 'Aucun quiz disponible',
                 style: TextStyle(
@@ -45,37 +38,30 @@ class QuizEditorList extends HookConsumerWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-            );
-          }
-
-          final quizList = snapshot.data!;
-
-          return ListView.builder(
-            itemCount: quizList.length,
-            itemBuilder: (context, index) {
-              final quiz = quizList[index];
-              return ListTile(
-                title: Text(
-                  quiz.name,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text("${quiz.questions.length} questions"),
-                trailing: const Icon(Icons.arrow_forward),
-                onTap: () {
-                  ref.read(quizProvider.notifier).setQuiz(quiz);
-                  context.go('/quizeditor');
-                },
-              );
-            },
-          );
-        },
-      ),
+            )
+          : ListView.builder(
+              itemCount: quizzes.length,
+              itemBuilder: (context, index) {
+                final quiz = quizzes[index];
+                return ListTile(
+                  title: Text(
+                    quiz.name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text("${quiz.questions.length} questions"),
+                  trailing: const Icon(Icons.arrow_forward),
+                  onTap: () {
+                    ref.read(quizProvider.notifier).setQuiz(quiz);
+                    context.go('/quizeditor');
+                  },
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Action à réaliser lors de l'appui sur le bouton
-          // context.go('/createquiz');
-        },
+        onPressed: () {},
         tooltip: 'Créer un quiz',
         backgroundColor: colorSecondary(),
         child: const Icon(Icons.add),

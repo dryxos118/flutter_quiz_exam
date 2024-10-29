@@ -45,12 +45,11 @@ final List<GoRoute> appRoutes = [
             context, state, QuizScaffold(body: const QuizEditorList()));
       }),
   GoRoute(
-    path: '/quizeditor/:id',
+    path: '/quizeditor',
     name: "Quiz Editor",
     pageBuilder: (context, state) {
-      final quizId = state.pathParameters['id'] ?? "";
       return _buildFadeTransitionPage(
-          context, state, QuizScaffold(body: QuizEditor(quizId)));
+          context, state, QuizScaffold(body: const QuizEditor("")));
     },
   ),
 ];
