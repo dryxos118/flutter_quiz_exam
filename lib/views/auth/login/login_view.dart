@@ -9,39 +9,34 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo
-              Container(
-                child: ClipRRect(
-                  borderRadius: generalBorderRadius(),
-                  child: Image.asset(
-                    'assets/images/quiz-logo.png',
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 100),
+            ClipRRect(
+              borderRadius: generalBorderRadius(),
+              child: Image.asset(
+                'assets/images/quiz-logo.png',
+                height: 300,
+                fit: BoxFit.cover,
               ),
-              const SizedBox(height: 20),
-              // Formulaire de connexion
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: LoginForm(),
-              ),
-              // Bouton pour aller à la page d'inscription
-              TextButton(
-                onPressed: () {
-                  context.go("/register");
-                },
-                child: const Text('Pas encore de compte ? Inscrivez-vous'),
-              ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 20),
+            // Formulaire de connexion
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: LoginForm(),
+            ),
+            // Bouton pour aller à la page d'inscription
+            TextButton(
+              onPressed: () {
+                context.go("/register");
+              },
+              child: const Text('Pas encore de compte ? Inscrivez-vous'),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -9,37 +9,32 @@ class RegisterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo
-              Container(
-                child: ClipRRect(
-                  borderRadius: generalBorderRadius(),
-                  child: Image.asset(
-                    'assets/images/quiz-logo.png',
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 100),
+            ClipRRect(
+              borderRadius: generalBorderRadius(),
+              child: Image.asset(
+                'assets/images/quiz-logo.png',
+                height: 300,
+                fit: BoxFit.cover,
               ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: RegisterForm(),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.go("/login");
-                },
-                child: const Text('Déjà un compte ? Connectez-vous'),
-              ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: RegisterForm(),
+            ),
+            TextButton(
+              onPressed: () {
+                context.go("/login");
+              },
+              child: const Text('Déjà un compte ? Connectez-vous'),
+            ),
+          ],
+        ),
       ),
     );
   }
