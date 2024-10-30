@@ -28,16 +28,16 @@ class FirebaseProvider extends StateNotifier<FirebaseAuth?> {
   Future<UserCredential?> register(
       {required String email, required String password}) async {
     try {
-      final t = await state!.createUserWithEmailAndPassword(
+      final userCredential = await state!.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      print('résultat : $t');
-      return t;
+      print('Utilisateur enregistré : $userCredential');
+      return userCredential;
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      handleAuthException(e, "Erreur d'inscription");
     } catch (e) {
-      print(e);
+      handleGenericError(e, "Erreur inconnue lors de l'inscription");
     }
     return null;
   }
@@ -45,9 +45,12 @@ class FirebaseProvider extends StateNotifier<FirebaseAuth?> {
   Future<bool> logout() async {
     try {
       await state!.signOut();
+      print('Déconnexion réussie');
       return true;
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      handleAuthException(e, "Erreur de déconnexion");
+    } catch (e) {
+      handleGenericError(e, "Erreur inconnue lors de la déconnexion");
     }
     return false;
   }
@@ -55,15 +58,44 @@ class FirebaseProvider extends StateNotifier<FirebaseAuth?> {
   Future<UserCredential?> login(
       {required String email, required String password}) async {
     try {
-      var t = await state!.signInWithEmailAndPassword(
+      var userCredential = await state!.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      print(state);
-      return t;
+      print('Utilisateur connecté : $userCredential');
+      return userCredential;
     } on FirebaseAuthException catch (e) {
-      print(e.message);
+      handleAuthException(e, "Erreur de connexion");
+    } catch (e) {
+      handleGenericError(e, "Erreur inconnue lors de la connexion");
     }
     return null;
+  }
+
+  void handleAuthException(FirebaseAuthException e, String context) {
+    switch (e.code) {
+      case 'email-already-in-use':
+        print('$context : L\'adresse e-mail est déjà utilisée.');
+        break;
+      case 'invalid-email':
+        print('$context : L\'adresse e-mail est invalide.');
+        break;
+      case 'weak-password':
+        print('$context : Le mot de passe est trop faible.');
+        break;
+      case 'user-not-found':
+        print('$context : Aucun utilisateur trouvé avec cet e-mail.');
+        break;
+      case 'wrong-password':
+        print('$context : Le mot de passe est incorrect.');
+        break;
+      default:
+        print('$context : ${e.code} - ${e.message}');
+        break;
+    }
+  }
+
+  void handleGenericError(Object e, String context) {
+    print('$context : $e');
   }
 }

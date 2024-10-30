@@ -70,6 +70,7 @@ class Quiz {
         questions: questions ?? this.questions,
         leaderboard: leaderboard ?? this.leaderboard,
         userId: userId ?? this.userId,
-        userName: userName ?? this.userName);
+        userName: userName ?? this.userName,
+        uid: uid);
   }
 }
