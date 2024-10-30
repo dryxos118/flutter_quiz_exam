@@ -8,11 +8,11 @@ class AuthTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const DefaultTabController(
+    return DefaultTabController(
       length: 2,
       child: Column(
         children: [
-          TabBar(
+          const TabBar(
             tabs: [
               Tab(text: 'Informations utilisateur'),
               Tab(text: 'Derniers quiz joués'),
@@ -24,7 +24,7 @@ class AuthTab extends ConsumerWidget {
             child: TabBarView(
               children: [
                 UserInfo(),
-                LastQuizzes(),
+                const LastQuizzes(),
               ],
             ),
           ),
