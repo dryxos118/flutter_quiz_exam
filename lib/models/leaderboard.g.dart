@@ -10,6 +10,7 @@ Leaderboard _$LeaderboardFromJson(Map<String, dynamic> json) => Leaderboard(
       quizUid: json['quizUid'] as String,
       quizName: json['quizName'] as String,
       score: (json['score'] as num).toInt(),
+      questionCount: (json['questionCount'] as num).toInt(),
       isAbandoned: json['isAbandoned'] as bool,
     );
 
@@ -18,5 +19,6 @@ Map<String, dynamic> _$LeaderboardToJson(Leaderboard instance) =>
       'quizUid': instance.quizUid,
       'quizName': instance.quizName,
       'score': instance.score,
+      'questionCount': instance.questionCount,
       'isAbandoned': instance.isAbandoned,
     };

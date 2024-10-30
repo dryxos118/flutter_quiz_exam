@@ -7,7 +7,7 @@ class UserInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider);
+    final user = ref.watch(userNotifier);
 
     return Center(
       child: user != null

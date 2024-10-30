@@ -5,8 +5,6 @@ import 'package:flutter_quiz_exam/models/user.dart' as app;
 import 'package:flutter_quiz_exam/logic/provider/firebase_auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final userProvider = StateProvider<app.User?>((ref) => null);
-
 final userNotifier =
     StateNotifierProvider<UserNotifier, app.User?>((ref) => UserNotifier(ref));
 
@@ -14,51 +12,43 @@ class UserNotifier extends StateNotifier<app.User?> {
   Ref ref;
   UserNotifier(this.ref) : super(null);
 
-  Future<bool> registerInFirebase(
-      {required app.User user,
-      required String email,
-      required String password}) async {
+  Future<bool> registerInFirebase(String email, String password) async {
     await ref
         .read(firebaseNotifier.notifier)
         .register(email: email, password: password)
         .then((value) async {
       if (value != null && value.user != null) {
-        user.uid = value.user!.uid;
-        await createNewUser(user: user);
+        final user = app.User(email: value.user!.email);
+        await createNewUser(user);
         return true;
       }
     }, onError: (error) => false);
     return false;
   }
 
-  Future<void> createNewUser({required app.User user}) async {
+  Future<void> createNewUser(app.User user) async {
     try {
-      await FirebaseFirestore.instance
-          .collection('user')
-          .doc(user.uid)
-          .set(user.toSnapshot());
-      state = user;
+      var test = await FirebaseFirestore.instance
+          .collection('users')
+          .add(user.toSnapshot());
+      state = user.copyWith(uid: test.id);
     } catch (e) {
       print(e);
     }
   }
 
-  Future<bool> loginInFirebase(
-      {required String email, required String password}) async {
+  Future<bool> loginInFirebase(String email, String password) async {
     try {
       final userCredential = await ref
           .read(firebaseNotifier.notifier)
           .login(email: email, password: password);
       if (userCredential != null && userCredential.user != null) {
         final snapshot = await FirebaseFirestore.instance
-            .collection('user')
-            .doc(userCredential.user!.uid)
+            .collection('users')
+            .where("email", isEqualTo: email)
             .get();
-        if (snapshot.exists) {
-          state =
-              app.User.fromSnapshot(snapshot.data(), userCredential.user!.uid);
-          return true;
-        }
+        state = app.User.fromSnapshot(snapshot.docs.first.data());
+        return true;
       }
     } catch (error) {
       print(error);
@@ -77,33 +67,21 @@ class UserNotifier extends StateNotifier<app.User?> {
     return false;
   }
 
-  Future<void> addQuizToLeaderboard({
-    required String quizUid,
-    required String quizName,
-    required int score,
-    required bool isAbandoned,
-  }) async {
+  Future<void> addQuizToLeaderboard(Leaderboard quizLeaderboardEntry) async {
     if (state != null) {
-      final quizLeaderboardEntry = Leaderboard(
-        quizUid: quizUid,
-        quizName: quizName,
-        score: score,
-        isAbandoned: isAbandoned,
-      );
+      final updatedLeaderboard = List<Leaderboard>.from(state!.leaderboard);
+      updatedLeaderboard.add(quizLeaderboardEntry);
 
-      state!.leaderboard.insert(0, quizLeaderboardEntry);
-      if (state!.leaderboard.length > 5) {
-        state!.leaderboard.removeLast();
+      if (updatedLeaderboard.length > 10) {
+        updatedLeaderboard.removeAt(0);
       }
 
-      state = state;
+      state = state!.copyWith(leaderboard: updatedLeaderboard);
 
       await FirebaseFirestore.instance
-          .collection('user')
+          .collection('users')
           .doc(state!.uid)
-          .update({
-        'leaderboard': state!.leaderboard.map((q) => q.toJson()).toList(),
-      });
+          .set(state!.toSnapshot());
     }
   }
 }

@@ -7,24 +7,29 @@ class LastQuizzes extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider);
-    final leaderboard = user?.leaderboard.take(5).toList() ?? [];
+    final user = ref.watch(userNotifier);
+    final leaderboard = user?.leaderboard ?? [];
 
-    print("User: $user");
-    print("Leaderboard: $leaderboard");
-
-    return ListView.builder(
-      itemCount: leaderboard.length,
-      itemBuilder: (context, index) {
-        final quiz = leaderboard[index];
-        return ListTile(
-          title: Text(quiz.quizName),
-          subtitle: Text("Score: ${quiz.score}"),
-          trailing: quiz.isAbandoned
-              ? const Text("Abandonné", style: TextStyle(color: Colors.red))
-              : null,
-        );
-      },
-    );
+    return leaderboard.isEmpty
+        ? const Center(
+            child: Text("il n'y a pas de partie jouée"),
+          )
+        : ListView.builder(
+            itemCount: leaderboard.length,
+            itemBuilder: (context, index) {
+              final quiz = leaderboard[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text(quiz.quizName),
+                  subtitle: Text("Score: ${quiz.score}"),
+                  trailing: quiz.isAbandoned
+                      ? const Text("Abandonné",
+                          style: TextStyle(color: Colors.red))
+                      : null,
+                ),
+              );
+            },
+          );
   }
 }

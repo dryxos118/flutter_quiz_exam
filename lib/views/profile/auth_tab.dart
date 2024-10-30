@@ -8,29 +8,27 @@ class AuthTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Scaffold(
-      body: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: [
-            TabBar(
-              tabs: [
-                Tab(text: 'Informations utilisateur'),
-                Tab(text: 'Derniers quiz joués'),
+    return const DefaultTabController(
+      length: 2,
+      child: Column(
+        children: [
+          TabBar(
+            tabs: [
+              Tab(text: 'Informations utilisateur'),
+              Tab(text: 'Derniers quiz joués'),
+            ],
+            labelColor: Color(0xffa6fafd),
+            indicatorColor: Color(0xffa6fafd),
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                UserInfo(),
+                LastQuizzes(),
               ],
-              labelColor: Color(0xffa6fafd),
-              indicatorColor: Color(0xffa6fafd),
             ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  UserInfo(),
-                  LastQuizzes(),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

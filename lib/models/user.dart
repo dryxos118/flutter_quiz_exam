@@ -1,14 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_quiz_exam/models/leaderboard.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
 class User {
-  String? uid;
-  String? firstName;
-  String? lastName;
-  String? email;
-  List<Leaderboard> leaderboard;
+  final String? uid;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final List<Leaderboard> leaderboard;
 
   User({
     this.uid,
@@ -25,20 +23,26 @@ class User {
       firstName: data['firstName'],
       lastName: data['lastName'],
       email: data['email'],
+      leaderboard: (data['leaderboard'] as List<dynamic>?)
+              ?.map((q) => Leaderboard.fromJson(q as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
   Map<String, dynamic> toSnapshot() {
     return {
+      'uid': uid,
       'firstName': firstName,
       'lastName': lastName,
       'email': email,
+      'leaderboard': leaderboard.map((l) => l.toJson()).toList(),
     };
   }
 
-  factory User.fromSnapshot(Map<String, dynamic>? json, String uid) {
+  factory User.fromSnapshot(Map<String, dynamic>? json) {
     return User(
-      uid: uid,
+      uid: json?["uid"],
       firstName: json?['firstName'],
       lastName: json?['lastName'],
       email: json?['email'],
@@ -46,6 +50,21 @@ class User {
               ?.map((q) => Leaderboard.fromJson(q as Map<String, dynamic>))
               .toList() ??
           [],
+    );
+  }
+
+  User copyWith({
+    String? firstName,
+    String? lastName,
+    List<Leaderboard>? leaderboard,
+    String? uid,
+  }) {
+    return User(
+      uid: uid ?? this.uid,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email,
+      leaderboard: leaderboard ?? this.leaderboard,
     );
   }
 }

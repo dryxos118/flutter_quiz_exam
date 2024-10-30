@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_quiz_exam/logic/provider/quiz_games_stream_provider.dart';
+import 'package:flutter_quiz_exam/logic/provider/user_provider.dart';
+import 'package:flutter_quiz_exam/models/leaderboard.dart';
 import 'package:flutter_quiz_exam/views/quiz/games/widget/quiz_options.dart';
 import 'package:flutter_quiz_exam/views/quiz/games/widget/quiz_question.dart';
 import 'package:go_router/go_router.dart';
@@ -41,6 +43,13 @@ class QuizGames extends HookConsumerWidget {
       if (currentQuestionIndex.value < quiz.questions.length - 1) {
         currentQuestionIndex.value += 1;
       } else {
+        final leaderboard = Leaderboard(
+            quizUid: quiz.uid ?? quizId,
+            quizName: quiz.name,
+            score: score.value,
+            questionCount: quiz.questionCount,
+            isAbandoned: false);
+        ref.read(userNotifier.notifier).addQuizToLeaderboard(leaderboard);
         showScoreDialog(context, score.value, quiz.questionCount);
       }
     }
