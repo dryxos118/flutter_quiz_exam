@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_exam/constants/constants.dart';
 import 'package:flutter_quiz_exam/models/quiz.dart';
-import 'package:flutter_quiz_exam/views/quiz/quiz_topic_center.dart';
+import 'package:flutter_quiz_exam/views/quiz/topic/quiz_topic_center.dart';
 import 'package:go_router/go_router.dart';
 
 class QuizTopicItem extends StatelessWidget {

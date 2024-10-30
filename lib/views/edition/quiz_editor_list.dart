@@ -131,7 +131,7 @@ class QuizEditorList extends HookConsumerWidget {
                                     ElevatedButton(
                                       onPressed: () {
                                         ref
-                                            .read(quizProvider.notifier)
+                                            .read(quizEditorProvider.notifier)
                                             .setQuiz(quiz);
                                         context.go('/quizeditor');
                                       },

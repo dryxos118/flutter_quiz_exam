@@ -15,7 +15,6 @@ class LoginForm extends HookConsumerWidget {
     final email = useState("");
     final password = useState("");
     final obscureText = useState(false);
-    //final test = ref.watch(firebaseUser);
 
     Future<void> submitForm(VoidCallback onSubmited) async {
       if (_formKey.currentState?.validate() ?? false) {

@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_quiz_exam/logic/provider/firebase_auth_provider.dart';
 import 'package:flutter_quiz_exam/models/question.dart';
 import 'package:flutter_quiz_exam/models/quiz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// Provider pour gérer l'état du quiz
-final quizProvider = StateNotifierProvider<QuizEditorProvider, Quiz>((ref) {
+final quizEditorProvider =
+    StateNotifierProvider<QuizEditorProvider, Quiz>((ref) {
   return QuizEditorProvider(ref);
 });
 
@@ -13,21 +12,22 @@ class QuizEditorProvider extends StateNotifier<Quiz> {
   Ref ref;
   QuizEditorProvider(this.ref) : super(Quiz(name: '', tags: [], questions: []));
 
+  /// Methods for set new quiz state
   void setQuiz(Quiz quiz) {
     state = quiz;
   }
 
-  // Méthode pour mettre à jour le nom du quiz
+  /// Methods for update quiz name
   void updateQuizName(String name) {
     state = state.copyWith(name: name);
   }
 
-  // Méthode pour mettre à jour les tags du quiz
+  /// Methods for update quiz tags
   void updateTags(List<String> tags) {
     state = state.copyWith(tags: tags);
   }
 
-  /// Méthode pour ajouter une question
+  /// Methods for add a new question
   void addQuestion() {
     final newQuestion = Question(
       text: '',
@@ -38,18 +38,20 @@ class QuizEditorProvider extends StateNotifier<Quiz> {
     state = state.copyWith(questions: [...state.questions, newQuestion]);
   }
 
-  /// Méthode pour mettre à jour une question
+  /// Methods for update questions
   void updateQuestion(int index, Question question) {
     final updatedQuestions = [...state.questions];
     updatedQuestions[index] = question;
     state = state.copyWith(questions: updatedQuestions);
   }
 
+  /// Methods for remove question
   void removeQuestion(int index) {
     final updatedQuestions = [...state.questions]..removeAt(index);
     state = state.copyWith(questions: updatedQuestions);
   }
 
+  /// Methods for save quiz in Firebase
   Future<void> saveQuiz(String id, String name) async {
     final firestore = FirebaseFirestore.instance;
     state = state.copyWith(userId: id, userName: name);
@@ -57,7 +59,7 @@ class QuizEditorProvider extends StateNotifier<Quiz> {
     if (state.uid == null) {
       await firestore.collection("quizzes").add(quizJson);
     } else {
-      await firestore.collection("quizzes").doc(state.uid).update(quizJson);
+      await firestore.collection("quizzes").doc(state.uid).set(quizJson);
     }
     state = Quiz(name: "", tags: [], questions: []);
   }
