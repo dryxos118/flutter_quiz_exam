@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_quiz_exam/logic/provider/firebase_auth_provider.dart';
 import 'package:flutter_quiz_exam/logic/provider/quiz_editor_provider.dart';
 import 'package:flutter_quiz_exam/models/quiz.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final loadingProvider = StateProvider<bool>((ref) => true);
 
 final quizListEditorProvider =
     StateNotifierProvider<QuizListEditorProvider, List<Quiz>>(
@@ -36,7 +33,7 @@ class QuizListEditorProvider extends StateNotifier<List<Quiz>> {
 // Méthode pour créer un quiz
   Future<void> createQuiz(String name) async {
     final user = ref.watch(firebaseProvider);
-    ref.read(quizProvider.notifier).setQuiz(Quiz(
+    ref.read(quizEditorProvider.notifier).setQuiz(Quiz(
         name: name,
         tags: [],
         questions: [],

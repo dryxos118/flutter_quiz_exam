@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quiz_exam/data/quiz_data.dart';
 import 'package:flutter_quiz_exam/logic/provider/quiz_games_stream_provider.dart';
 import 'package:flutter_quiz_exam/models/quiz.dart';
-import 'package:flutter_quiz_exam/views/quiz/quiz_topic.dart';
+import 'package:flutter_quiz_exam/views/quiz/topic/quiz_topic.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class QuizPage extends ConsumerWidget {

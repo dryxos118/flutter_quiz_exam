@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_exam/constants/constants.dart';
 import 'package:flutter_quiz_exam/models/quiz.dart';
+import 'package:flutter_quiz_exam/views/quiz/topic/quiz_topic_center.dart';
 import 'package:go_router/go_router.dart';
 
 class QuizTopicItem extends StatelessWidget {
@@ -31,36 +32,10 @@ class QuizTopicItem extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  quiz.name,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  "${quiz.questionCount} Questions",
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 6,
-                  children: quiz.tags.map((tag) {
-                    return Chip(
-                      label: Text(tag),
-                      backgroundColor: colorSecondary(),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
+          QuizTopicCenter(
+              name: quiz.name,
+              questionsCounts: quiz.questionCount,
+              tags: quiz.tags),
           Divider(
             color: colorSecondary(),
           ),

@@ -17,7 +17,7 @@ class QuizAppbar extends ConsumerWidget implements PreferredSizeWidget {
       title: const Padding(
         padding: EdgeInsets.all(20.0),
         child: Text(
-          'Quiz Flutter Exam',
+          'Le Petit Quiz',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
