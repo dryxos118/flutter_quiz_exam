@@ -54,26 +54,11 @@ class QuizEditorProvider extends StateNotifier<Quiz> {
     final firestore = FirebaseFirestore.instance;
     state = state.copyWith(userId: id, userName: name);
     final quizJson = state.toJsonFirebase();
-    await firestore.collection("quizzes").add(quizJson);
+    if (state.uid == null) {
+      await firestore.collection("quizzes").add(quizJson);
+    } else {
+      await firestore.collection("quizzes").doc(state.uid).update(quizJson);
+    }
     state = Quiz(name: "", tags: [], questions: []);
-  }
-
-  Future<List<Quiz>> getQuizByName() async {
-    final firestore = FirebaseFirestore.instance;
-    final user = ref.watch(firebaseProvider);
-    final quizzes = firestore
-        .collection('quizzes')
-        .where('userId', isEqualTo: user!.uid)
-        .get()
-        .then((snapshots) {
-      return List<Quiz>.from(
-        snapshots.docs
-            .map(
-              (doc) => Quiz.fromDocument(doc),
-            )
-            .toList(),
-      );
-    });
-    return quizzes;
   }
 }

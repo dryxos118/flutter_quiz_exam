@@ -16,57 +16,157 @@ class QuizEditorList extends HookConsumerWidget {
     // Écouter les quizzes
     final quizzes = ref.watch(quizListEditorProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const PreferredSize(
-          preferredSize: Size.fromHeight(kToolbarHeight),
-          child: Center(
-            child: Text(
-              'Éditeur de Quiz',
-              style: TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
-      ),
-      body: quizzes.isEmpty
-          ? const Center(
-              child: Text(
-                'Aucun quiz disponible',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Color(0xffa6fafd),
-                  fontWeight: FontWeight.bold,
+    return Stack(
+      children: [
+        Column(
+          children: [
+            // Titre de la page
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
+                child: Text(
+                  "Éditeur de Quiz",
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
-            )
-          : ListView.builder(
-              itemCount: quizzes.length,
-              itemBuilder: (context, index) {
-                final quiz = quizzes[index];
-                return ListTile(
-                  title: Text(
-                    quiz.name,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Text("${quiz.questions.length} questions"),
-                  trailing: const Icon(Icons.arrow_forward),
-                  onTap: () {
-                    ref.read(quizProvider.notifier).setQuiz(quiz);
-                    context.go('/quizeditor');
-                  },
-                );
-              },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Créer un quiz',
-        backgroundColor: colorSecondary(),
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            const SizedBox(height: 10),
+            Expanded(
+              child: quizzes.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Aucun quiz disponible',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xffa6fafd),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          IconButton(
+                            onPressed: () async {
+                              await ref
+                                  .read(quizListEditorProvider.notifier)
+                                  .getQuizzesByUser();
+                            },
+                            icon: const Icon(Icons.replay_outlined),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      itemCount: quizzes.length,
+                      itemBuilder: (context, index) {
+                        final quiz = quizzes[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          shadowColor: const Color(0xffa6fafd),
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  quiz.name,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  "${quiz.questions.length} Questions",
+                                  style: const TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                                const SizedBox(height: 10),
+                                Wrap(
+                                  spacing: 6,
+                                  children: quiz.tags.map((tag) {
+                                    return Chip(
+                                      label: Text(tag),
+                                      backgroundColor: colorSecondary(),
+                                    );
+                                  }).toList(),
+                                ),
+                                Divider(
+                                  color: colorSecondary(),
+                                ),
+                                // Alignement des boutons
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        if (quiz.uid != null) {
+                                          ref
+                                              .read(quizListEditorProvider
+                                                  .notifier)
+                                              .deleteQuiz(quiz.uid!);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    'Erreur : ID du quiz introuvable')),
+                                          );
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        foregroundColor: Colors
+                                            .red, // Couleur du texte en rouge
+                                      ),
+                                      child: const Text(
+                                        "Supprimer le quiz",
+                                      ),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        ref
+                                            .read(quizProvider.notifier)
+                                            .setQuiz(quiz);
+                                        context.go('/quizeditor');
+                                      },
+                                      child: const Text(
+                                        "Éditer le quiz",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 0),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
+        Positioned(
+          bottom: 16,
+          right: 16,
+          child: FloatingActionButton(
+            onPressed: () {
+              ref
+                  .read(quizListEditorProvider.notifier)
+                  .createQuiz("Quiz_${quizzes.length}");
+              context.go('/quizeditor');
+            },
+            tooltip: 'Créer un quiz',
+            backgroundColor: colorSecondary(),
+            child: const Icon(Icons.add),
+          ),
+        ),
+      ],
     );
   }
 }
