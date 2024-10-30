@@ -178,11 +178,16 @@ class QuizEditor extends HookConsumerWidget {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      onPressed: saveQuiz,
+                      onPressed: () async {
+                        saveQuiz();
+                        context.go('/editor');
+                      },
                       child: const Text(
                         'Enregistrer le Quiz',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
