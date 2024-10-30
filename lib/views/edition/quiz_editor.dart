@@ -12,19 +12,19 @@ class QuizEditor extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Call provider
     final quiz = ref.watch(quizProvider);
     final quizNotifier = ref.read(quizProvider.notifier);
     final user = ref.watch(firebaseProvider);
-
+    // Variable with hook
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final nameController = useTextEditingController(text: quiz.name);
     final tagsController = useTextEditingController(text: quiz.tags.join(", "));
-
-    // Initialisation de l'état d'expansion
     final expandedPanels = useState<List<bool>>(
       List.generate(quiz.questions.length, (_) => false),
     );
 
+    // Save a Quiz
     void saveQuiz() async {
       if (formKey.currentState!.validate()) {
         formKey.currentState!.save();
@@ -35,16 +35,13 @@ class QuizEditor extends HookConsumerWidget {
       }
     }
 
-    // Gestion de l'ajout de question
+    // Add a Question
     void addQuestion() {
       quizNotifier.addQuestion();
-      expandedPanels.value = [
-        ...expandedPanels.value,
-        true
-      ]; // La nouvelle question est étendue par défaut
+      expandedPanels.value = [...expandedPanels.value, true];
     }
 
-    // Gestion de la suppression de question
+    // Remouve a Question
     void removeQuestion(int index) {
       quizNotifier.removeQuestion(index);
       expandedPanels.value = [
