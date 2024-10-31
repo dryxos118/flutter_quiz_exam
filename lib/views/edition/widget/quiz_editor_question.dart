@@ -53,7 +53,13 @@ class QuizEditorQuestion extends HookConsumerWidget {
                     ),
                   ),
                   leading: IconButton(
-                    onPressed: () => onRemoveQuestion(index),
+                    onPressed: () => {
+                      expandedPanels.value = [
+                        for (int i = 0; i < expandedPanels.value.length; i++)
+                          if (i != index) expandedPanels.value[i]
+                      ],
+                      onRemoveQuestion(index)
+                    },
                     icon: const Icon(Icons.delete, color: Colors.redAccent),
                   ),
                 );
@@ -78,7 +84,10 @@ class QuizEditorQuestion extends HookConsumerWidget {
                   ),
                 )
               : TextButton.icon(
-                  onPressed: onAddQuestion,
+                  onPressed: () => {
+                    expandedPanels.value = [...expandedPanels.value, true],
+                    onAddQuestion()
+                  },
                   icon: const Icon(Icons.add, color: Colors.blueAccent),
                   label: const Text(
                     'Ajouter une Question',

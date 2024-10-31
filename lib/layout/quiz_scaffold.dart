@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quiz_exam/layout/quiz_appbar.dart';
 import 'package:flutter_quiz_exam/layout/quiz_bottom_navigation.dart';
 import 'package:flutter_quiz_exam/logic/provider/firebase_auth_provider.dart';
+import 'package:flutter_quiz_exam/logic/provider/user_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,13 +13,12 @@ class QuizScaffold extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(firebaseProvider);
+    final userCredentials = ref.watch(firebaseNotifier);
+    final user = ref.read(userNotifier.notifier);
     void onLoginPressed() {
-      print(user);
-      if (user != null) {
-        print("logout");
-        ref.read(firebaseNotifier.notifier).logout();
-        context.go("/login");
+      if (userCredentials != null) {
+        user.logoutFromFirebase();
+        context.go('/login');
       }
     }
 

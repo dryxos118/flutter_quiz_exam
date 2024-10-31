@@ -4,12 +4,18 @@ part 'leaderboard.g.dart';
 
 @JsonSerializable()
 class Leaderboard {
-  final String userName;
+  final String quizUid;
+  final String quizName;
   final int score;
+  final int questionCount;
+  final bool isAbandoned;
 
   Leaderboard({
-    required this.userName,
+    required this.quizUid,
+    required this.quizName,
     required this.score,
+    required this.questionCount,
+    required this.isAbandoned,
   });
 
   factory Leaderboard.fromJson(Map<String, dynamic> json) =>

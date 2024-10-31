@@ -20,6 +20,9 @@ class QuizBottomNavigation extends HookConsumerWidget {
         case 1:
           context.go('/editor');
           break;
+        case 2:
+          context.go('/profile');
+          break;
       }
     }
 
@@ -32,6 +35,10 @@ class QuizBottomNavigation extends HookConsumerWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.edit_note),
           label: 'Editor',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.account_box),
+          label: 'Profile',
         ),
       ],
       currentIndex: currentIndex,

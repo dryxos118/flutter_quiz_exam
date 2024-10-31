@@ -19,19 +19,9 @@ class QuizPage extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Titre de la page
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Text(
-              "Liste des Quiz",
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-          ),
+        const SizedBox(
+          height: 20,
         ),
-        const SizedBox(height: 10),
-
-        // Contenu principal
         Expanded(
           child: quizStream.when(
             data: (quizList) => quizList.isNotEmpty
