@@ -95,59 +95,61 @@ class QuizGames extends HookConsumerWidget {
 
     final currentQuestion = quiz.questions[currentQuestionIndex.value];
     return Scaffold(
-      body: Padding(
-        padding:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 50, top: 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            QuizQuestion(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(top: 70),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              QuizQuestion(
                 questionIndex: currentQuestionIndex.value,
                 questionText: currentQuestion.text,
                 questionsCount: quiz.questionCount,
-                quizName: quiz.name),
-            const SizedBox(height: 10),
-            QuizOptions(
-              currentQuestion.options,
-              currentQuestion.correctAnswerIndex,
-              (String value) {
-                nextQuestion(value);
-              },
-            ),
-            const Spacer(),
-            Center(
-              child: TextButton(
-                onPressed: () => showAbandonedDialog(),
-                child: const Text(
-                  'Voulez-vous abandonner ?',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.redAccent,
+                quizName: quiz.name,
+              ),
+              const SizedBox(height: 10),
+              QuizOptions(
+                currentQuestion.options,
+                currentQuestion.correctAnswerIndex,
+                (String value) {
+                  nextQuestion(value);
+                },
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: TextButton(
+                  onPressed: () => showAbandonedDialog(),
+                  child: const Text(
+                    'Voulez-vous abandonner ?',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.redAccent,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  void showScoreDialog(BuildContext context, int score, int questionCount) {
-    QuickAlert.show(
-        context: context,
-        type: score >= questionCount / 2
-            ? QuickAlertType.success
-            : QuickAlertType.error,
-        widget: AlertDialog(
-          title: const Text('Quiz Terminé'),
-          content: Text('Votre score: $score/$questionCount'),
-        ),
-        confirmBtnText: "Ok",
-        onConfirmBtnTap: () {
-          Navigator.pop(context);
-          context.go("/quiz");
-        });
-  }
+void showScoreDialog(BuildContext context, int score, int questionCount) {
+  QuickAlert.show(
+      context: context,
+      type: score >= questionCount / 2
+          ? QuickAlertType.success
+          : QuickAlertType.error,
+      widget: AlertDialog(
+        title: const Text('Quiz Terminé'),
+        content: Text('Votre score: $score/$questionCount'),
+      ),
+      confirmBtnText: "Ok",
+      onConfirmBtnTap: () {
+        Navigator.pop(context);
+        context.go("/quiz");
+      });
 }

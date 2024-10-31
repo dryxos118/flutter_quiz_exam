@@ -16,17 +16,39 @@ class LoginForm extends HookConsumerWidget {
     final password = useState("");
     final obscureText = useState(false);
 
-    Future<void> submitForm(VoidCallback onSubmited) async {
+    void onSubmited(bool isLogged) {
+      if (isLogged) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text(
+            "Utilisateur connecter",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: colorSecondary(),
+        ));
+        context.go("/quiz");
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text(
+            "Vous avez surrement pas de compte",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: colorSecondary(),
+        ));
+        context.go('/register');
+      }
+    }
+
+    Future<void> submitForm() async {
       if (_formKey.currentState?.validate() ?? false) {
         _formKey.currentState?.save();
         print(email.value);
         print(password.value);
 
-        await ref
+        final isLogged = await ref
             .read(userNotifier.notifier)
             .loginInFirebase(email.value, password.value);
 
-        onSubmited();
+        onSubmited(isLogged);
       }
     }
 
@@ -92,13 +114,9 @@ class LoginForm extends HookConsumerWidget {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () => submitForm(
-              () {
-                // SnackbarService(context)
-                //     .showSnackbar(title: "User Connected", type: Type.succes);
-                context.go('/quiz');
-              },
-            ),
+            onPressed: () => {
+              submitForm(),
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: colorSecondary(),
               foregroundColor: colorOfTextWhite(),
