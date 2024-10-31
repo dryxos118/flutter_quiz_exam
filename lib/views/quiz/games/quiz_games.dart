@@ -38,6 +38,7 @@ class QuizGames extends HookConsumerWidget {
             style: TextStyle(color: Colors.white),
           ),
           backgroundColor: Color(0xff00696c),
+          duration: Duration(seconds: 1),
         ));
       }
       if (currentQuestionIndex.value < quiz.questions.length - 1) {
@@ -52,6 +53,44 @@ class QuizGames extends HookConsumerWidget {
         ref.read(userNotifier.notifier).addQuizToLeaderboard(leaderboard);
         showScoreDialog(context, score.value, quiz.questionCount);
       }
+    }
+
+    void showAbandonedDialog() {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Abandonner le Quiz'),
+          content: const Text("Êtes-vous sûr de vouloir abandonner ce quiz ?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (currentQuestionIndex.value > 0) {
+                  final leaderboard = Leaderboard(
+                      quizUid: quiz.uid ?? quizId,
+                      quizName: quiz.name,
+                      score: score.value,
+                      questionCount: quiz.questionCount,
+                      isAbandoned: true);
+                  ref
+                      .read(userNotifier.notifier)
+                      .addQuizToLeaderboard(leaderboard);
+                }
+                Navigator.pop(context);
+                context.go("/quiz");
+              },
+              child: const Text('Oui, abandonner',
+                  style: TextStyle(color: Colors.red)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Continuer',
+                  style: TextStyle(color: Colors.green)),
+            ),
+          ],
+        ),
+      );
     }
 
     final currentQuestion = quiz.questions[currentQuestionIndex.value];
@@ -78,7 +117,7 @@ class QuizGames extends HookConsumerWidget {
             const Spacer(),
             Center(
               child: TextButton(
-                onPressed: () => showAbandonedDialog(context),
+                onPressed: () => showAbandonedDialog(),
                 child: const Text(
                   'Voulez-vous abandonner ?',
                   style: TextStyle(
@@ -91,33 +130,6 @@ class QuizGames extends HookConsumerWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  void showAbandonedDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Abandonner le Quiz'),
-        content: const Text("Êtes-vous sûr de vouloir abandonner ce quiz ?"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              context.go("/quiz");
-            },
-            child: const Text('Oui, abandonner',
-                style: TextStyle(color: Colors.red)),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child:
-                const Text('Continuer', style: TextStyle(color: Colors.green)),
-          ),
-        ],
       ),
     );
   }

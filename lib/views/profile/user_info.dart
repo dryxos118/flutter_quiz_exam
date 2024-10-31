@@ -12,7 +12,7 @@ class UserInfo extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userNotifier);
-
+    final userProvider = ref.read(userNotifier.notifier);
     // Controller
     final firstNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
@@ -27,34 +27,44 @@ class UserInfo extends HookConsumerWidget {
       return null;
     }, [user]);
 
-    return Center(
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Champ pour l'email
-              Container(
+    void onSaveUser() {
+      if (_formKey.currentState?.validate() ?? false) {
+        _formKey.currentState?.save();
+        userProvider.updateUser(
+            firstNameController.text, lastNameController.text);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              "Utilisateur modifier",
+              style: TextStyle(color: Colors.white),
+            ),
+            duration: Duration(seconds: 1),
+            backgroundColor: Color(0xff00696c)));
+      }
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 30, bottom: 16, left: 16, right: 16),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Container(
                 decoration: BoxDecoration(
                   borderRadius: buttonBorderRadius(),
                 ),
                 child: TextFormField(
-                  enabled: false,
-                  controller: emailController,
-                  decoration: textFormFieldDecoration("Email"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Modifier votre email';
-                    }
-                    return null;
-                  },
-                ),
+                    enabled: false,
+                    controller: emailController,
+                    decoration: textFormFieldDecoration("Email")),
               ),
-              const SizedBox(height: 50),
-
-              // Champ pour le prénom
-              Container(
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Container(
                 decoration: BoxDecoration(
                   borderRadius: buttonBorderRadius(),
                 ),
@@ -69,10 +79,11 @@ class UserInfo extends HookConsumerWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 50),
-
-              // Champ pour le nom
-              Container(
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Container(
                 decoration: BoxDecoration(
                   borderRadius: buttonBorderRadius(),
                 ),
@@ -87,26 +98,25 @@ class UserInfo extends HookConsumerWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 50),
-
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    _formKey.currentState?.save();
-                    // Logique d'enregistrement ici
-                  }
-                },
+            ),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ElevatedButton(
+                onPressed: () => onSaveUser(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colorSecondary(),
                   foregroundColor: colorOfTextWhite(),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: buttonBorderRadius(),
                   ),
                 ),
                 child: const Text('Enregistrer'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

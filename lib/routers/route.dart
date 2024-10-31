@@ -57,7 +57,8 @@ final List<GoRoute> appRoutes = [
     path: '/profile',
     name: "Profile",
     pageBuilder: (context, state) {
-      return _buildFadeTransitionPage(context, state, const ProfilePage());
+      return _buildFadeTransitionPage(
+          context, state, QuizScaffold(body: const ProfilePage()));
     },
   ),
 ];

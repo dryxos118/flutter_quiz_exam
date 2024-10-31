@@ -67,12 +67,24 @@ class UserNotifier extends StateNotifier<app.User?> {
     return false;
   }
 
+  Future<void> updateUser(String firstName, String lastName) async {
+    try {
+      state = state!.copyWith(firstName: firstName, lastName: lastName);
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(state!.uid)
+          .update(state!.toSnapshot());
+    } catch (error) {
+      print(error);
+    }
+  }
+
   Future<void> addQuizToLeaderboard(Leaderboard quizLeaderboardEntry) async {
     if (state != null) {
       final updatedLeaderboard = List<Leaderboard>.from(state!.leaderboard);
       updatedLeaderboard.add(quizLeaderboardEntry);
 
-      if (updatedLeaderboard.length > 10) {
+      if (updatedLeaderboard.length > 5) {
         updatedLeaderboard.removeAt(0);
       }
 
@@ -81,7 +93,7 @@ class UserNotifier extends StateNotifier<app.User?> {
       await FirebaseFirestore.instance
           .collection('users')
           .doc(state!.uid)
-          .set(state!.toSnapshot());
+          .update(state!.toSnapshot());
     }
   }
 }

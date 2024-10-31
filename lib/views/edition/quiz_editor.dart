@@ -22,9 +22,6 @@ class QuizEditor extends HookConsumerWidget {
     final formKey = useMemoized(() => GlobalKey<FormState>());
     final nameController = useTextEditingController(text: quiz.name);
     final tagsController = useTextEditingController(text: quiz.tags.join(", "));
-    final expandedPanels = useState<List<bool>>(
-      List.generate(quiz.questions.length, (_) => false),
-    );
 
     // Save a Quiz
     void saveQuiz(VoidCallback onSave) async {
@@ -38,16 +35,11 @@ class QuizEditor extends HookConsumerWidget {
     // Add a Question
     void addQuestion() {
       quizNotifier.addQuestion();
-      expandedPanels.value = [...expandedPanels.value, true];
     }
 
     // Remouve a Question
     void removeQuestion(int index) {
       quizNotifier.removeQuestion(index);
-      expandedPanels.value = [
-        for (int i = 0; i < expandedPanels.value.length; i++)
-          if (i != index) expandedPanels.value[i]
-      ];
     }
 
     return Padding(
@@ -101,7 +93,7 @@ class QuizEditor extends HookConsumerWidget {
                   const SizedBox(height: 30),
                   //
                   QuizEditorQuestion(quiz.questionCount, quiz,
-                      onAddQuestion: () => addQuestion,
+                      onAddQuestion: () => addQuestion(),
                       onRemoveQuestion: (int index) => removeQuestion(index)),
                   //
                   const SizedBox(height: 20),
